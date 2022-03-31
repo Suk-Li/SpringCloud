@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="site.whatsblog.dao.DeptMapper">
+    <resultMap id="BaseResultMap" type="site.whatsblog.pojo.Dept">
+        <id column="deptno" jdbcType="BIGINT" property="deptno"/>
+        <result column="dname" jdbcType="VARCHAR" property="dname"/>
+        <result column="db_source" jdbcType="VARCHAR" property="dbSource"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        deptno, dname, db_source
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from dept
+        where deptno = #{deptno,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from dept
+        where deptno = #{deptno,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="site.whatsblog.pojo.Dept">
+        insert into dept (dname, db_source)
+        values (#{dname,jdbcType=VARCHAR}, database())
+    </insert>
+    <insert id="insertSelective" parameterType="site.whatsblog.pojo.Dept">
+        insert into dept
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dname != null">
+                dname,db_source,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+
+            <if test="dname != null">
+                #{dname,jdbcType=VARCHAR},database()
+            </if>
+
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="site.whatsblog.pojo.Dept">
+        update dept
+        <set>
+            <if test="dname != null">
+                dname = #{dname,jdbcType=VARCHAR},
+            </if>
+            <if test="dbSource != null">
+                db_source = #{dbSource,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where deptno = #{deptno,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="site.whatsblog.pojo.Dept">
+        update dept
+        set dname     = #{dname,jdbcType=VARCHAR},
+            db_source = #{dbSource,jdbcType=VARCHAR}
+        where deptno = #{deptno,jdbcType=BIGINT}
+    </update>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        select *
+        from dept
+    </select>
+</mapper>
